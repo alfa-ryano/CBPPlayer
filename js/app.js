@@ -1,8 +1,17 @@
 let eventNumber = -1
+let MAIN_CONTAINER_WIDTH = 640
+let MAIN_CONTAINER_HEIGHT = 480
+let MAIN_CONTAINER_MARGIN = '-240px 0 0 -320px'
 
-var graph = null
+let graph = null
+let layout = null
 
 function main(container) {
+
+    container.style.height = MAIN_CONTAINER_HEIGHT + 'px'
+    container.style.width = MAIN_CONTAINER_WIDTH + 'px'
+    container.style.margin = MAIN_CONTAINER_MARGIN
+
     // Checks if the browser is supported
     if (!mxClient.isBrowserSupported()) {
         // Displays an error message if the browser is not supported.
@@ -14,23 +23,14 @@ function main(container) {
         // Creates the graph inside the given container
         graph = new mxGraph(container);
 
-        // Enables rubberband selection
-        new mxRubberband(graph);
+        //create layout
+        layout = new mxHierarchicalLayout(graph)
 
-        // Gets the default parent for inserting new cells. This
-        // is normally the first child of the root (ie. layer 0).
-        var parent = graph.getDefaultParent();
+        //get root (layer 0)
+        let parent = graph.getDefaultParent();
 
-        // Adds cells to the model in a single step
-        graph.getModel().beginUpdate();
-        try {
-            // var v1 = graph.insertVertex(parent, null, 'Hello,', 20, 20, 80, 30);
-            // var v2 = graph.insertVertex(parent, null, 'World!', 200, 150, 80, 30);
-            // var e1 = graph.insertEdge(parent, null, '', v1, v2);
-        } finally {
-            // Updates the display
-            graph.getModel().endUpdate();
-        }
+        //execute layout
+        layout.execute(parent)
     }
 };
 
