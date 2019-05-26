@@ -8,9 +8,11 @@ let layout = null
 
 function main(container) {
 
-    container.style.height = MAIN_CONTAINER_HEIGHT + 'px'
-    container.style.width = MAIN_CONTAINER_WIDTH + 'px'
-    container.style.margin = MAIN_CONTAINER_MARGIN
+    // let width = document.getElementById("mainContainer").style.width;
+    // let height = document.getElementById("mainContainer").style.height;
+    // container.style.width = width;
+    // container.style.height = height;
+    // container.style.margin = MAIN_CONTAINER_MARGIN
 
     // Checks if the browser is supported
     if (!mxClient.isBrowserSupported()) {
@@ -24,7 +26,15 @@ function main(container) {
         graph = new mxGraph(container);
 
         //create layout
-        layout = new mxHierarchicalLayout(graph)
+        // layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_SOUTH)
+        // layout = new mxFastOrganicLayout(graph)
+        // layout = new mxCircleLayout(graph)
+        layout = new mxCompactTreeLayout(graph, false)
+        // layout = new mxCompositeLayout(graph)
+        // layout = new mxParallelEdgeLayout(graph)
+        // layout = new mxPartitionLayout(graph)
+        // layout = new mxStackLayout(graph)
+
 
         //get root (layer 0)
         let parent = graph.getDefaultParent();
@@ -34,10 +44,28 @@ function main(container) {
     }
 };
 
+
+let timer = null
+
+function play() {
+    document.getElementById('buttonPlay').disabled = true
+    if (eventNumber > cbpPlayer.resource.changeEvents.length) {
+        stop()
+        return
+    }
+    timer = setInterval(next, 500)
+}
+
+function stop() {
+    clearTimeout(timer)
+}
+
+
 function next() {
     eventNumber = eventNumber + 1
     if (eventNumber == 0 || eventNumber < cbpPlayer.resource.changeEvents.length) {
         let changeEvent = cbpPlayer.resource.changeEvents[eventNumber]
+        console.log(changeEvent.constructor.name)
         changeEvent.drawReplay(graph)
     }
 };

@@ -71,7 +71,6 @@ class Resource {
 class ChangeEvent {
     constructor() {
         this.value = null
-        this.session = null
     }
 
     replay() {
@@ -94,10 +93,14 @@ class SessionEvent extends ChangeEvent {
         super();
         this.id = null
         this.time = null
+        this.session = null
     }
 }
 
-class CreateEObjectEvent extends ChangeEvent {
+/**
+ *
+ */
+class CreateElementEvent extends ChangeEvent {
     constructor() {
         super();
         this.id = null
@@ -118,10 +121,13 @@ class CreateEObjectEvent extends ChangeEvent {
     }
 }
 
+/**
+ *
+ */
 class AddToResourceEvent extends ChangeEvent {
     constructor() {
         super();
-        this.position = null
+        this.index = null
         this.resource = null
         this.valueId = null
         this.value = null
@@ -129,10 +135,134 @@ class AddToResourceEvent extends ChangeEvent {
 
     replay() {
         this.value = this.resource.getEObject(this.valueId)
-        this.resource.contents.values.set(this.position, this.value)
+        this.resource.contents.values.set(this.index, this.value)
     }
 }
 
+/**
+ *
+ */
+class RemoveFromResourceEvent extends ChangeEvent {
+    constructor() {
+        super();
+        this.index = null
+        this.resource = null
+        this.valueId = null
+        this.value = null
+    }
+
+    replay() {
+        this.value = this.resource.getEObject(this.valueId)
+        this.resource.contents.values.set(this.index, this.value)
+        let key = null
+        for (let entry of this.resource.contents.values) {
+            key = entry.key
+            let value = entry.value
+            if (this.value == value) {
+                break;
+            }
+            console
+        }
+        this.resource.contents.values.delete(key)
+    }
+}
+
+/**
+ *
+ */
+class SetAttributeEvent extends ChangeEvent {
+    constructor() {
+        super();
+        this.resource = null
+        this.featureName = null
+        this.targetId = null
+        this.valueId = null
+        this.target = null
+    }
+
+    replay() {
+        this.eObject = this.resource.getEObject(this.targetId)
+        let feature = this.eObject.features.get(this.featureName)
+        if (feature == null) {
+            feature = new EFeature(this.eObject)
+            this.eObject.features.set(this.featureName, feature)
+        }
+        feature.values.set(0, this.value)
+    }
+}
+
+/**
+ *
+ */
+class UnsetEAttributeEvent extends ChangeEvent {
+    constructor() {
+        super();
+        this.resource = null
+        this.featureName = null
+        this.targetId = null
+        this.valueId = null
+        this.target = null
+    }
+
+    replay() {
+        this.eObject = this.resource.getEObject(this.targetId)
+        let feature = this.eObject.features.get(this.featureName)
+        if (feature == null) {
+            feature = new EFeature(this.eObject)
+            this.eObject.features.set(this.featureName, feature)
+        }
+        feature.values.set(0, null)
+    }
+}
+
+/**
+ *
+ */
+class SetEReferenceEvent extends ChangeEvent {
+    constructor() {
+        super();
+        this.resource = null
+        this.featureName = null
+        this.targetId = null
+        this.valueId = null
+        this.target = null
+    }
+
+    replay() {
+        this.eObject = this.resource.getEObject(this.targetId)
+        let feature = this.eObject.features.get(this.featureName)
+        if (feature == null) {
+            feature = new EFeature(this.eObject)
+            feature.type = REFERENCE
+            this.eObject.features.set(this.featureName, feature)
+        }
+        this.value = this.resource.getEObject(this.valueId)
+        feature.values.set(0, this.value)
+    }
+}
+
+class UnsetEReferenceEvent extends ChangeEvent {
+    constructor() {
+        super();
+        this.resource = null
+        this.featureName = null
+        this.targetId = null
+        this.valueId = null
+        this.target = null
+    }
+
+    replay() {
+        this.eObject = this.resource.getEObject(this.targetId)
+        let feature = this.eObject.features.get(this.featureName)
+        if (feature == null) {
+            feature = new EFeature(this.eObject)
+            feature.type = REFERENCE
+            this.eObject.features.set(this.featureName, feature)
+        }
+        this.value = this.resource.getEObject(this.valueId)
+        feature.values.set(0, null)
+    }
+}
 
 /**
  * CbpUtil
@@ -232,7 +362,7 @@ class CbpPlayer {
                 this.resource.changeEvents.push(changeEvent)
                 console;
             } else if (eventType == 'create') {
-                let changeEvent = new CreateEObjectEvent()
+                let changeEvent = new CreateElementEvent()
                 changeEvent.id = domEvent.getAttribute('id')
                 changeEvent.package = domEvent.getAttribute('epackage')
                 changeEvent.className = domEvent.getAttribute('eclass')
@@ -241,12 +371,30 @@ class CbpPlayer {
                 console;
             } else if (eventType == 'add-to-resource') {
                 let changeEvent = new AddToResourceEvent()
-                changeEvent.position = domEvent.getAttribute('position')
+                changeEvent.index = domEvent.getAttribute('index')
                 changeEvent.valueId = domEvent.firstChild.getAttribute('eobject')
                 changeEvent.resource = this.resource
                 this.resource.changeEvents.push(changeEvent)
                 console;
+            } else if (eventType == 'remove-from-resource') {
+                let changeEvent = new RemoveFromResourceEvent()
+                changeEvent.index = domEvent.getAttribute('index')
+                changeEvent.valueId = domEvent.firstChild.getAttribute('eobject')
+                changeEvent.resource = this.resource
+                this.resource.changeEvents.push(changeEvent)
+                console;
+            } else if (eventType == 'set-eattribute') {
+                let changeEvent = new SetAttributeEvent()
+                changeEvent.index = 0
+                changeEvent.value = domEvent.firstChild.getAttribute('literal')
+                changeEvent.resource = this.resource
+                changeEvent.targetId = domEvent.getAttribute('target')
+                changeEvent.featureName = domEvent.getAttribute('name')
+                this.resource.changeEvents.push(changeEvent)
+                console;
             }
+
+            // <add-to-ereference composite="_UAI88HMsEeme-P__sTghpg" eclass="Node" name="valNodes" index="0" target="O-1"><value eclass="Node" eobject="O-2"/></add-to-ereference>
         }
     }
 }

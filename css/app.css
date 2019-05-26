@@ -1,8 +1,44 @@
-#graphContainer {
+#controller {
     position: absolute;
     overflow: hidden;
     background-color: gainsboro;
     top: 50%;
     left: 50%;
     cursor: default;
+}
+
+#mainContainer {
+    position: absolute;
+    overflow: hidden;
+    width: 99%;
+    height: 100%;
+    /*margin: -240px 0 0 -320px;*/
+    /*top: 50%;*/
+    /*left: 50%;*/
+    cursor: default;
+}
+
+#graphContainer {
+    position: relative;
+    height: 90%;
+    width: 100%;
+    background-color: gainsboro;
+    overflow: auto;
+    margin: 0px 10px 10px 10px;
+}
+
+#controllerContainer {
+    position: relative;
+    align-items: center;
+    vertical-align: center;
+    height: 10%;
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#buttonPlay {
+    width: 90px;
+    height: 30px;
 }
