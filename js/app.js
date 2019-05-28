@@ -5,6 +5,7 @@ let MAIN_CONTAINER_MARGIN = '-240px 0 0 -320px'
 
 let graph = null
 let layout = null
+let previousChangeEvent = null
 
 function main(container) {
 
@@ -39,6 +40,17 @@ function main(container) {
         //get root (layer 0)
         let parent = graph.getDefaultParent();
 
+        let width = 60
+        let height = 20
+        let a = graph.container.clientWidth * graph.view.scale
+        let b = graph.container.clientHeight * graph.view.scale
+        let x = (-width + a) / 2
+        let y =  10
+
+        graph.getModel().beginUpdate();
+        graph.insertVertex(parent, 'resource', 'resource', x, y, width, height)
+        graph.getModel().endUpdate();
+
         //execute layout
         layout.execute(parent)
     }
@@ -53,7 +65,7 @@ function play() {
         stop()
         return
     }
-    timer = setInterval(next, 500)
+    timer = setInterval(next, 1000)
 }
 
 function stop() {
@@ -65,7 +77,8 @@ function next() {
     eventNumber = eventNumber + 1
     if (eventNumber == 0 || eventNumber < cbpPlayer.resource.changeEvents.length) {
         let changeEvent = cbpPlayer.resource.changeEvents[eventNumber]
-        console.log(changeEvent.constructor.name)
+        console.log("Replaying Event " + eventNumber + ": " + changeEvent.constructor.name)
         changeEvent.drawReplay(graph)
+        previousChangeEvent = changeEvent
     }
 };
