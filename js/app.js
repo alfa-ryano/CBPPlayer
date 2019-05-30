@@ -15,19 +15,25 @@ let timer = null
 
 function play() {
     document.getElementById('buttonPlay').disabled = true
-    if (eventNumber > cbpPlayer.resource.changeEvents.length) {
-        stop()
-        return
-    }
     timer = setInterval(next, 200)
 }
 
 function stop() {
     clearTimeout(timer)
+
+    var encoder = new mxCodec();
+    var node1 = encoder.encode(graphs.get("ECORE").getModel());
+    mxUtils.popup(mxUtils.getPrettyXml(node1), false);
+    var node2 = encoder.encode(graphs.get("BPMN2").getModel());
+    mxUtils.popup(mxUtils.getPrettyXml(node2), false);
 }
 
 
 function next() {
+    if (eventNumber > cbpPlayer.resource.changeEvents.length) {
+        stop()
+        return
+    }
     eventNumber = eventNumber + 1
     if (eventNumber == 0 || eventNumber < cbpPlayer.resource.changeEvents.length) {
         let changeEvent = cbpPlayer.resource.changeEvents[eventNumber]

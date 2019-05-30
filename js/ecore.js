@@ -430,6 +430,7 @@ Ecore.prototype.initialise = function(graphs) {
         style = graph.getStylesheet().getDefaultEdgeStyle()
         style[mxConstants.STYLE_STROKECOLOR] = 'black';
         style[mxConstants.STYLE_FONTCOLOR] = 'black';
+        // style[mxConstants.STYLE_ENDARROW] = 'none';
         style[mxConstants.STYLE_FONTSIZE] = '10';
 
         //create layout

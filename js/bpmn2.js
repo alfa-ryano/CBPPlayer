@@ -343,7 +343,7 @@ Bpmn2.prototype.initialise = function (graphs) {
         style[mxConstants.STYLE_STROKECOLOR] = 'black';
         style[mxConstants.STYLE_FONTCOLOR] = 'black';
         style[mxConstants.STYLE_FONTSIZE] = '10';
-        
+
         //create layout
         // layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_SOUTH)
         // layout = new mxFastOrganicLayout(graph)
