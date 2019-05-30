@@ -1,6 +1,6 @@
-const MODEL_ECORE = "ECORE"
+const MODEL_BPMN2 = "BPMN2"
 
-class MetaEcore {
+class MetaBpmn2 {
     constructor() {
         this.contaimentReferences = []
         // this.contaimentReferences.push('valNodes')
@@ -9,15 +9,18 @@ class MetaEcore {
         // this.contaimentReferences.push('flowElements')
     }
 }
-const metaEcore = new MetaEcore()
 
-class Ecore {
+const metaBpmn2 = new MetaBpmn2()
+
+class Bpmn2 {
     constructor() {
-        Ecore.prototype.layout = null
+        Bpmn2.prototype.layout = null
     }
+
 }
 
-Ecore.prototype.animate = function (graph) {
+
+Bpmn2.prototype.animate = function (graph) {
     let morph = new mxMorphing(graph);
     morph.addListener(mxEvent.DONE, function () {
         graph.getModel().endUpdate();
@@ -25,7 +28,7 @@ Ecore.prototype.animate = function (graph) {
     morph.startAnimation();
 }
 
-Ecore.prototype.EcoreDrawDeleteElementEvent = function(graph, event) {
+Bpmn2.prototype.Bpmn2DrawDeleteElementEvent = function(graph, event) {
     graph.getModel().beginUpdate();
     try {
         let parent = graph.getDefaultParent()
@@ -49,15 +52,15 @@ Ecore.prototype.EcoreDrawDeleteElementEvent = function(graph, event) {
 
         }
 
-        Ecore.prototype.layout.execute(parent);
+        Bpmn2.prototype.layout.execute(parent);
     } catch (e) {
         console.log(e)
     } finally {
-        Ecore.prototype.animate(graph)
+        Bpmn2.prototype.animate(graph)
     }
 }
 
-Ecore.prototype.EcoreDrawAddToResourceEvent = function (graph, event) {
+Bpmn2.prototype.Bpmn2DrawAddToResourceEvent = function (graph, event) {
     graph.getModel().beginUpdate();
     try {
         let parent = graph.getDefaultParent()
@@ -77,29 +80,29 @@ Ecore.prototype.EcoreDrawAddToResourceEvent = function (graph, event) {
         }
         graph.insertEdge(parent, edgeId, event.index, res, element)
 
-        Ecore.prototype.layout.execute(parent);
+        Bpmn2.prototype.layout.execute(parent);
     } catch (e) {
         console.log(e)
     } finally {
-        Ecore.prototype.animate(graph)
+        Bpmn2.prototype.animate(graph)
     }
 }
 
-Ecore.prototype.EcoreDrawRemoveFromResourceEvent= function (graph, event) {
+Bpmn2.prototype.Bpmn2DrawRemoveFromResourceEvent= function (graph, event) {
     graph.getModel().beginUpdate();
     try {
         // let parent = graph.getDefaultParent()
         // let cell = graph.getModel().getCell(event.valueId)
         // graph.model.remove(cell)
-        // Ecore.prototype.layout.execute(parent);
+        // Bpmn2.prototype.layout.execute(parent);
     } catch (e) {
         console.log(e)
     } finally {
-        Ecore.prototype.animate(graph)
+        Bpmn2.prototype.animate(graph)
     }
 }
 
-Ecore.prototype.EcoreDrawSetAttributeEvent= function (graph, event) {
+Bpmn2.prototype.Bpmn2DrawSetAttributeEvent= function (graph, event) {
     graph.getModel().beginUpdate();
     try {
         let parent = graph.getDefaultParent()
@@ -135,15 +138,15 @@ Ecore.prototype.EcoreDrawSetAttributeEvent= function (graph, event) {
             valueNode.value = value
         }
 
-        Ecore.prototype.layout.execute(parent);
+        Bpmn2.prototype.layout.execute(parent);
     } catch (e) {
         console.log(e)
     } finally {
-        Ecore.prototype.animate(graph)
+        Bpmn2.prototype.animate(graph)
     }
 }
 
-Ecore.prototype.EcoreDrawUnsetAttributeEvent= function (graph, event) {
+Bpmn2.prototype.Bpmn2DrawUnsetAttributeEvent= function (graph, event) {
     graph.getModel().beginUpdate();
     try {
         let parent = graph.getDefaultParent()
@@ -186,16 +189,16 @@ Ecore.prototype.EcoreDrawUnsetAttributeEvent= function (graph, event) {
         graph.getModel().remove(ownerNode)
         // }
 
-        Ecore.prototype.layout.execute(parent);
+        Bpmn2.prototype.layout.execute(parent);
     } catch
         (e) {
         console.log(e)
     } finally {
-        Ecore.prototype.animate(graph)
+        Bpmn2.prototype.animate(graph)
     }
 }
 
-Ecore.prototype.EcoreDrawSetReferenceEvent= function (graph, event) {
+Bpmn2.prototype.Bpmn2DrawSetReferenceEvent= function (graph, event) {
     graph.getModel().beginUpdate();
     try {
         let parent = graph.getDefaultParent()
@@ -232,16 +235,16 @@ Ecore.prototype.EcoreDrawSetReferenceEvent= function (graph, event) {
 
         let edge = graph.insertEdge(parent, valueEdgeId, null, featureNode, valueNode)
 
-        Ecore.prototype.layout.execute(parent);
+        Bpmn2.prototype.layout.execute(parent);
     } catch
         (e) {
         console.log(e)
     } finally {
-        Ecore.prototype.animate(graph)
+        Bpmn2.prototype.animate(graph)
     }
 }
 
-Ecore.prototype.EcoreDrawUnsetReferenceEvent= function (graph, event) {
+Bpmn2.prototype.Bpmn2DrawUnsetReferenceEvent= function (graph, event) {
     graph.getModel().beginUpdate();
     try {
         let parent = graph.getDefaultParent()
@@ -284,16 +287,16 @@ Ecore.prototype.EcoreDrawUnsetReferenceEvent= function (graph, event) {
             graph.getModel().remove(ownerNode)
         }
 
-        Ecore.prototype.layout.execute(parent);
+        Bpmn2.prototype.layout.execute(parent);
     } catch
         (e) {
         console.log(e)
     } finally {
-        Ecore.prototype.animate(graph)
+        Bpmn2.prototype.animate(graph)
     }
 }
 
-Ecore.prototype.EcoreDrawAddToReferenceEvent= function (graph, event) {
+Bpmn2.prototype.Bpmn2DrawAddToReferenceEvent= function (graph, event) {
     graph.getModel().beginUpdate();
     try {
         let parent = graph.getDefaultParent()
@@ -345,16 +348,16 @@ Ecore.prototype.EcoreDrawAddToReferenceEvent= function (graph, event) {
             let edge = graph.insertEdge(parent, valueEdgeId, index, featureNode, valueNode)
         }
 
-        Ecore.prototype.layout.execute(parent);
+        Bpmn2.prototype.layout.execute(parent);
     } catch (e) {
         console.log(e)
     } finally {
-        Ecore.prototype.animate(graph)
+        Bpmn2.prototype.animate(graph)
     }
 }
 
-// bpmn2:definitions=org.eclipse.Ecore.impl.DefinitionsImpl
-Ecore.prototype.EcoreDrawAddToAttributeEvent= function (graph, event) {
+// bpmn2:definitions=org.eclipse.bpmn2.impl.DefinitionsImpl
+Bpmn2.prototype.Bpmn2DrawAddToAttributeEvent= function (graph, event) {
 
     graph.getModel().beginUpdate();
     try {
@@ -396,17 +399,17 @@ Ecore.prototype.EcoreDrawAddToAttributeEvent= function (graph, event) {
         let edge = graph.insertEdge(parent, valueEdgeId, index, featureNode, valueNode)
 
 
-        Ecore.prototype.layout.execute(parent);
+        Bpmn2.prototype.layout.execute(parent);
     } catch (e) {
         console.log(e)
     } finally {
-        Ecore.prototype.animate(graph)
+        Bpmn2.prototype.animate(graph)
     }
 }
 
-Ecore.prototype.initialise = function(graphs) {
+Bpmn2.prototype.initialise = function(graphs) {
 
-    let container = document.getElementById('graphContainer1')
+    let container = document.getElementById('graphContainer2')
 
     // Checks if the browser is supported
     if (!mxClient.isBrowserSupported()) {
@@ -418,14 +421,14 @@ Ecore.prototype.initialise = function(graphs) {
 
         // Creates the graph inside the given container
         let graph = new mxGraph(container);
-        graph.container.title = MODEL_ECORE
-        graphs.set(MODEL_ECORE, graph)
+        graph.container.title = MODEL_BPMN2
+        graphs.set(MODEL_BPMN2, graph)
 
         //create layout
         // layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_SOUTH)
         // layout = new mxFastOrganicLayout(graph)
-        // layout = new mxCircleLayout(graph)
-        Ecore.prototype.layout = new mxCompactTreeLayout(graph, false)
+        // Bpmn2.prototype.layout = new mxCircleLayout(graph)
+        Bpmn2.prototype.layout = new mxCompactTreeLayout(graph, false)
         // layout = new mxCompositeLayout(graph)
         // layout = new mxParallelEdgeLayout(graph)
         // layout = new mxPartitionLayout(graph)
@@ -447,7 +450,7 @@ Ecore.prototype.initialise = function(graphs) {
         graph.getModel().endUpdate();
 
         //execute layout
-        Ecore.prototype.layout.execute(parent)
+        Bpmn2.prototype.layout.execute(parent)
         console
     }
 }
@@ -455,22 +458,22 @@ Ecore.prototype.initialise = function(graphs) {
 // assign appropriate drawing function to each event
 for (let changeEvent of cbpPlayer.resource.changeEvents) {
     if (changeEvent instanceof DeleteElementEvent) {
-        changeEvent.drawers.set(MODEL_ECORE, Ecore.prototype.EcoreDrawDeleteElementEvent)
+        changeEvent.drawers.set(MODEL_BPMN2, Bpmn2.prototype.Bpmn2DrawDeleteElementEvent)
     } else if (changeEvent instanceof AddToResourceEvent) {
-        changeEvent.drawers.set(MODEL_ECORE, Ecore.prototype.EcoreDrawAddToResourceEvent)
+        changeEvent.drawers.set(MODEL_BPMN2, Bpmn2.prototype.Bpmn2DrawAddToResourceEvent)
     } else if (changeEvent instanceof RemoveFromResourceEvent) {
-        changeEvent.drawers.set(MODEL_ECORE, Ecore.prototype.EcoreDrawRemoveFromResourceEvent)
+        changeEvent.drawers.set(MODEL_BPMN2, Bpmn2.prototype.Bpmn2DrawRemoveFromResourceEvent)
     } else if (changeEvent instanceof SetAttributeEvent) {
-        changeEvent.drawers.set(MODEL_ECORE, Ecore.prototype.EcoreDrawSetAttributeEvent)
+        changeEvent.drawers.set(MODEL_BPMN2, Bpmn2.prototype.Bpmn2DrawSetAttributeEvent)
     } else if (changeEvent instanceof UnsetAttributeEvent) {
-        changeEvent.drawers.set(MODEL_ECORE, Ecore.prototype.EcoreDrawUnsetAttributeEvent)
+        changeEvent.drawers.set(MODEL_BPMN2, Bpmn2.prototype.Bpmn2DrawUnsetAttributeEvent)
     } else if (changeEvent instanceof SetReferenceEvent) {
-        changeEvent.drawers.set(MODEL_ECORE, Ecore.prototype.EcoreDrawSetReferenceEvent)
+        changeEvent.drawers.set(MODEL_BPMN2, Bpmn2.prototype.Bpmn2DrawSetReferenceEvent)
     } else if (changeEvent instanceof UnsetReferenceEvent) {
-        changeEvent.drawers.set(MODEL_ECORE, Ecore.prototype.EcoreDrawUnsetReferenceEvent)
+        changeEvent.drawers.set(MODEL_BPMN2, Bpmn2.prototype.Bpmn2DrawUnsetReferenceEvent)
     } else if (changeEvent instanceof AddToReferenceEvent) {
-        changeEvent.drawers.set(MODEL_ECORE, Ecore.prototype.EcoreDrawAddToReferenceEvent)
+        changeEvent.drawers.set(MODEL_BPMN2, Bpmn2.prototype.Bpmn2DrawAddToReferenceEvent)
     } else if (changeEvent instanceof AddToAttributeEvent) {
-        changeEvent.drawers.set(MODEL_ECORE, Ecore.prototype.EcoreDrawAddToAttributeEvent)
+        changeEvent.drawers.set(MODEL_BPMN2, Bpmn2.prototype.Bpmn2DrawAddToAttributeEvent)
     }
 }

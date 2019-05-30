@@ -4,15 +4,19 @@
     <title>CBP Player</title>
     <link rel="stylesheet" href="css/app.css">
     <script src="js/mxClient.js"></script>
-    <script src="js/meta.js"></script>
     <script src="js/cbpplayer.js"></script>
     <script src="js/ecore.js"></script>
+    <script src="js/bpmn2.js"></script>
     <script src="js/app.js"></script>
 </head>
 <body>
-<body onload="main(document.getElementById('graphContainer'))">
+<body onload="main()">
 <div id="mainContainer">
     <div id="graphContainer">
+        <div id="graphContainer1">
+        </div>
+        <div id="graphContainer2">
+        </div>
     </div>
     <div id="controllerContainer">
         <button id="buttonPlay" onclick="play()">Play</button>

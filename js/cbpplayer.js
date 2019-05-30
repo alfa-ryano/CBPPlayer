@@ -43,6 +43,7 @@ class Resource {
         this.idToEObjectMap = new Map()
         this.eObjectToIdMap = new Map()
         this.contents = new EFeature()
+        this.contents.name = 'resource'
         this.changeEvents = []
         this.packages = []
     }
@@ -72,17 +73,24 @@ class Resource {
 class ChangeEvent {
     constructor() {
         this.value = null
+        this.drawers = new Map()
     }
 
     replay() {
     }
 
-    draw(graph) {
+    draw(graphs) {
+        for (let[key, graph] of graphs){
+            let drawer = this.drawers.get(key)
+            if (drawer != null){
+                drawer(graph, this)
+            }
+        }
     }
 
-    drawReplay(graph) {
+    drawReplay(graphs) {
         this.replay()
-        this.draw(graph)
+        this.draw(graphs)
     }
 }
 
@@ -119,6 +127,29 @@ class CreateElementEvent extends ChangeEvent {
         eObject.className = this.className
         eObject.resource = this.resource
         this.resource.setId(eObject, eObject.id)
+    }
+}
+
+/**
+ *
+ */
+class DeleteElementEvent extends ChangeEvent {
+    constructor() {
+        super();
+        this.id = null
+        this.package = null
+        this.className = null
+        this.resource = null
+        this.eObject = null
+    }
+
+    replay() {
+        this.eObject = new EObject()
+        let eObject = this.eObject
+        eObject.id = this.id
+        eObject.package = this.package
+        eObject.className = this.className
+        eObject.resource = this.resource
     }
 }
 
@@ -178,7 +209,10 @@ class SetAttributeEvent extends ChangeEvent {
         this.featureName = null
         this.targetId = null
         this.valueId = null
+        this.value = null
         this.target = null
+        this.oldValueId = null
+        this.oldValue = null
     }
 
     replay() {
@@ -186,6 +220,7 @@ class SetAttributeEvent extends ChangeEvent {
         let feature = this.eObject.features.get(this.featureName)
         if (feature == null) {
             feature = new EFeature(this.eObject)
+            feature.name = this.featureName
             this.eObject.features.set(this.featureName, feature)
         }
         feature.values.set(0, this.value)
@@ -202,7 +237,10 @@ class UnsetAttributeEvent extends ChangeEvent {
         this.featureName = null
         this.targetId = null
         this.valueId = null
+        this.value = null
         this.target = null
+        this.oldValueId = null
+        this.oldValue = null
     }
 
     replay() {
@@ -210,6 +248,7 @@ class UnsetAttributeEvent extends ChangeEvent {
         let feature = this.eObject.features.get(this.featureName)
         if (feature == null) {
             feature = new EFeature(this.eObject)
+            feature.name = this.featureName
             this.eObject.features.set(this.featureName, feature)
         }
         feature.values.set(0, null)
@@ -226,17 +265,29 @@ class SetReferenceEvent extends ChangeEvent {
         this.featureName = null
         this.targetId = null
         this.valueId = null
+        this.value = null
         this.target = null
+        this.oldValueId = null
+        this.oldValue = null
     }
 
     replay() {
         this.eObject = this.resource.getEObject(this.targetId)
+        if (this.eObject == null){
+            this.eObject = new EObject()
+            let eObject = this.eObject
+            eObject.id = this.targetId
+            eObject.className = this.className
+            eObject.resource = this.resource
+            this.resource.setId(eObject, eObject.id)
+        }
         let feature = this.eObject.features.get(this.featureName)
         if (feature == null) {
             feature = new EFeature(this.eObject)
+            feature.name = this.featureName
             feature.type = REFERENCE
             this.eObject.features.set(this.featureName, feature)
-            if (meta.contaimentReferences.includes(this.featureName)){
+            if (metaEcore.contaimentReferences.includes(this.featureName)) {
                 feature.isContainment = true
             } else {
                 feature.isContainment = false
@@ -254,17 +305,29 @@ class UnsetReferenceEvent extends ChangeEvent {
         this.featureName = null
         this.targetId = null
         this.valueId = null
+        this.value = null
         this.target = null
+        this.oldValueId = null
+        this.oldValue = null
     }
 
     replay() {
         this.eObject = this.resource.getEObject(this.targetId)
+        if (this.eObject == null){
+            this.eObject = new EObject()
+            let eObject = this.eObject
+            eObject.id = this.targetId
+            eObject.className = this.className
+            eObject.resource = this.resource
+            this.resource.setId(eObject, eObject.id)
+        }
         let feature = this.eObject.features.get(this.featureName)
         if (feature == null) {
             feature = new EFeature(this.eObject)
+            feature.name = this.featureName
             feature.type = REFERENCE
             this.eObject.features.set(this.featureName, feature)
-            if (meta.contaimentReferences.includes(this.featureName)){
+            if (metaEcore.contaimentReferences.includes(this.featureName)) {
                 feature.isContainment = true
             } else {
                 feature.isContainment = false
@@ -283,18 +346,32 @@ class AddToReferenceEvent extends ChangeEvent {
         this.featureName = null
         this.targetId = null
         this.valueId = null
+        this.value = null
         this.target = null
         this.index = null
+        this.oldValueId = null
+        this.oldValue = null
     }
 
     replay() {
         this.eObject = this.resource.getEObject(this.targetId)
+
+        if (this.eObject == null){
+            this.eObject = new EObject()
+            let eObject = this.eObject
+            eObject.id = this.targetId
+            eObject.className = this.className
+            eObject.resource = this.resource
+            this.resource.setId(eObject, eObject.id)
+        }
+
         let feature = this.eObject.features.get(this.featureName)
         if (feature == null) {
             feature = new EFeature(this.eObject)
+            feature.name = this.featureName
             feature.type = REFERENCE
             this.eObject.features.set(this.featureName, feature)
-            if (meta.contaimentReferences.includes(this.featureName)){
+            if (metaEcore.contaimentReferences.includes(this.featureName)) {
                 feature.isContainment = true
             } else {
                 feature.isContainment = false
@@ -305,8 +382,54 @@ class AddToReferenceEvent extends ChangeEvent {
         // move to tempValues for keys and values larger than or equal to index
         let tempValues = new Map()
         for (let [key, value] of feature.values) {
-            if (key >= this.index){
-                tempValues.set(key + 1,value)
+            if (key >= this.index) {
+                tempValues.set(key + 1, value)
+            }
+        }
+
+        //move keys and values in tempValues to the real feature
+        feature.values.set(this.index, this.value)
+        for (let [key, value] of tempValues) {
+            feature.values.set(key, value)
+        }
+        tempValues.clear()
+    }
+}
+
+class AddToAttributeEvent extends ChangeEvent {
+    constructor() {
+        super();
+        this.resource = null
+        this.featureName = null
+        this.targetId = null
+        this.valueId = null
+        this.value = null
+        this.target = null
+        this.index = null
+        this.oldValueId = null
+        this.oldValue = null
+    }
+
+    replay() {
+        this.eObject = this.resource.getEObject(this.targetId)
+        let feature = this.eObject.features.get(this.featureName)
+        if (feature == null) {
+            feature = new EFeature(this.eObject)
+            feature.name = this.featureName
+            feature.type = ATTRIBUTE
+            this.eObject.features.set(this.featureName, feature)
+            if (metaEcore.contaimentReferences.includes(this.featureName)) {
+                feature.isContainment = true
+            } else {
+                feature.isContainment = false
+            }
+        }
+
+        // move to tempValues for keys and values larger than or equal to index
+        let tempValues = new Map()
+        for (let [key, value] of feature.values) {
+            if (key >= this.index) {
+                tempValues.set(key + 1, value)
             }
         }
 
@@ -425,6 +548,14 @@ class CbpPlayer {
                 changeEvent.resource = this.resource
                 this.resource.changeEvents.push(changeEvent)
                 console;
+            } else if (eventType == 'delete') {
+                let changeEvent = new DeleteElementEvent()
+                changeEvent.id = domEvent.getAttribute('id')
+                changeEvent.package = domEvent.getAttribute('epackage')
+                changeEvent.className = domEvent.getAttribute('eclass')
+                changeEvent.resource = this.resource
+                this.resource.changeEvents.push(changeEvent)
+                console;
             } else if (eventType == 'add-to-resource') {
                 let changeEvent = new AddToResourceEvent()
                 changeEvent.index = domEvent.getAttribute('index')
@@ -444,8 +575,14 @@ class CbpPlayer {
             } else if (eventType == 'set-eattribute') {
                 let changeEvent = new SetAttributeEvent()
                 changeEvent.index = 0
-                changeEvent.value = domEvent.firstChild.getAttribute('literal')
+                if (domEvent.getElementsByTagName('value')[0] != null) {
+                    changeEvent.value = domEvent.getElementsByTagName('value')[0].getAttribute('literal')
+                }
+                if (domEvent.getElementsByTagName('old-value')[0] != null) {
+                    changeEvent.oldValue = domEvent.getElementsByTagName('old-value')[0].getAttribute('literal')
+                }
                 changeEvent.resource = this.resource
+                changeEvent.className = domEvent.getAttribute('eclass')
                 changeEvent.targetId = domEvent.getAttribute('target')
                 changeEvent.featureName = domEvent.getAttribute('name')
                 this.resource.changeEvents.push(changeEvent)
@@ -453,8 +590,14 @@ class CbpPlayer {
             } else if (eventType == 'unset-eattribute') {
                 let changeEvent = new UnsetAttributeEvent()
                 changeEvent.index = 0
-                changeEvent.value = null
                 changeEvent.resource = this.resource
+                if (domEvent.getElementsByTagName('value')[0] != null) {
+                    changeEvent.value = domEvent.getElementsByTagName('value')[0].getAttribute('literal')
+                }
+                if (domEvent.getElementsByTagName('old-value')[0] != null) {
+                    changeEvent.oldValue = domEvent.getElementsByTagName('old-value')[0].getAttribute('literal')
+                }
+                changeEvent.className = domEvent.getAttribute('eclass')
                 changeEvent.targetId = domEvent.getAttribute('target')
                 changeEvent.featureName = domEvent.getAttribute('name')
                 this.resource.changeEvents.push(changeEvent)
@@ -462,9 +605,15 @@ class CbpPlayer {
             } else if (eventType == 'set-ereference') {
                 let changeEvent = new SetReferenceEvent()
                 changeEvent.index = 0
-                changeEvent.valueId = domEvent.firstChild.getAttribute('eobject')
+                if (domEvent.getElementsByTagName('value')[0] != null) {
+                    changeEvent.valueId = domEvent.getElementsByTagName('value')[0].getAttribute('eobject')
+                }
+                if (domEvent.getElementsByTagName('old-value')[0] != null) {
+                    changeEvent.oldValueId = domEvent.getElementsByTagName('old-value')[0].getAttribute('eobject')
+                }
                 changeEvent.value = this.resource.getEObject(changeEvent.id)
                 changeEvent.resource = this.resource
+                changeEvent.className = domEvent.getAttribute('eclass')
                 changeEvent.targetId = domEvent.getAttribute('target')
                 changeEvent.featureName = domEvent.getAttribute('name')
                 this.resource.changeEvents.push(changeEvent)
@@ -472,18 +621,40 @@ class CbpPlayer {
             } else if (eventType == 'unset-ereference') {
                 let changeEvent = new UnsetReferenceEvent()
                 changeEvent.index = 0
-                changeEvent.valueId = domEvent.firstChild.getAttribute('eobject')
+                if (domEvent.getElementsByTagName('value')[0] != null) {
+                    changeEvent.valueId = domEvent.getElementsByTagName('value')[0].getAttribute('eobject')
+                }
+                if (domEvent.getElementsByTagName('old-value')[0] != null) {
+                    changeEvent.oldValueId = domEvent.getElementsByTagName('old-value')[0].getAttribute('eobject')
+                }
                 changeEvent.value = null
                 changeEvent.resource = this.resource
+                changeEvent.className = domEvent.getAttribute('eclass')
                 changeEvent.targetId = domEvent.getAttribute('target')
                 changeEvent.featureName = domEvent.getAttribute('name')
                 this.resource.changeEvents.push(changeEvent)
                 console;
             } else if (eventType == 'add-to-ereference') {
                 let changeEvent = new AddToReferenceEvent()
-                changeEvent.valueId = domEvent.firstChild.getAttribute('eobject')
+                changeEvent.valueId = domEvent.getElementsByTagName('value')[0].getAttribute('eobject')
                 changeEvent.value = this.resource.getEObject(changeEvent.id)
                 changeEvent.resource = this.resource
+                changeEvent.className = domEvent.getAttribute('eclass')
+                changeEvent.targetId = domEvent.getAttribute('target')
+                changeEvent.featureName = domEvent.getAttribute('name')
+                changeEvent.index = domEvent.getAttribute('position')
+                this.resource.changeEvents.push(changeEvent)
+                console;
+            } else if (eventType == 'add-to-eattribute') {
+                let changeEvent = new AddToAttributeEvent()
+                if (domEvent.getElementsByTagName('value')[0] != null) {
+                    changeEvent.value = domEvent.getElementsByTagName('value')[0].getAttribute('literal')
+                }
+                if (domEvent.getElementsByTagName('old-value')[0] != null) {
+                    changeEvent.oldValue = domEvent.getElementsByTagName('old-value')[0].getAttribute('literal')
+                }
+                changeEvent.resource = this.resource
+                changeEvent.className = domEvent.getAttribute('eclass')
                 changeEvent.targetId = domEvent.getAttribute('target')
                 changeEvent.featureName = domEvent.getAttribute('name')
                 changeEvent.index = domEvent.getAttribute('position')
@@ -500,5 +671,6 @@ class CbpPlayer {
  * MAIN CODE
  */
 var cbpPlayer = new CbpPlayer()
-var file = "cbp/origin.cbpxml"
+// var file = "cbp/origin.cbpxml"
+var file = "cbp/process_1.cbpxml"
 cbpPlayer.loadCbp(file)
