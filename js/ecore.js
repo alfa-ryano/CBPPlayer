@@ -132,7 +132,7 @@ Ecore.prototype.EcoreDrawSetAttributeEvent= function (graph, event) {
             valueNode = graph.insertVertex(parent, valueId, value, x, y, width, height, 'shape=hexagon;size=0.001;')
             let edge = graph.insertEdge(parent, valueEdgeId, null, featureNode, valueNode)
         } else {
-            valueNode.value = value
+            graph.getModel().setValue(valueNode, value)
         }
 
         Ecore.prototype.layout.execute(parent);
@@ -420,6 +420,17 @@ Ecore.prototype.initialise = function(graphs) {
         let graph = new mxGraph(container);
         graph.container.title = MODEL_ECORE
         graphs.set(MODEL_ECORE, graph)
+
+        let style = graph.getStylesheet().getDefaultVertexStyle();
+        style[mxConstants.STYLE_FILLCOLOR] = 'white';
+        style[mxConstants.STYLE_STROKECOLOR] = 'black';
+        style[mxConstants.STYLE_FONTCOLOR] = 'black';
+        style[mxConstants.STYLE_FONTSIZE] = '10';
+
+        style = graph.getStylesheet().getDefaultEdgeStyle()
+        style[mxConstants.STYLE_STROKECOLOR] = 'black';
+        style[mxConstants.STYLE_FONTCOLOR] = 'black';
+        style[mxConstants.STYLE_FONTSIZE] = '10';
 
         //create layout
         // layout = new mxHierarchicalLayout(graph, mxConstants.DIRECTION_SOUTH)
