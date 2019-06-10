@@ -80,9 +80,9 @@ class ChangeEvent {
     }
 
     draw(graphs) {
-        for (let[key, graph] of graphs){
+        for (let [key, graph] of graphs) {
             let drawer = this.drawers.get(key)
-            if (drawer != null){
+            if (drawer != null) {
                 drawer(graph, this)
             }
         }
@@ -273,7 +273,7 @@ class SetReferenceEvent extends ChangeEvent {
 
     replay() {
         this.eObject = this.resource.getEObject(this.targetId)
-        if (this.eObject == null){
+        if (this.eObject == null) {
             this.eObject = new EObject()
             let eObject = this.eObject
             eObject.id = this.targetId
@@ -313,7 +313,7 @@ class UnsetReferenceEvent extends ChangeEvent {
 
     replay() {
         this.eObject = this.resource.getEObject(this.targetId)
-        if (this.eObject == null){
+        if (this.eObject == null) {
             this.eObject = new EObject()
             let eObject = this.eObject
             eObject.id = this.targetId
@@ -356,7 +356,7 @@ class AddToReferenceEvent extends ChangeEvent {
     replay() {
         this.eObject = this.resource.getEObject(this.targetId)
 
-        if (this.eObject == null){
+        if (this.eObject == null) {
             this.eObject = new EObject()
             let eObject = this.eObject
             eObject.id = this.targetId
@@ -393,6 +393,12 @@ class AddToReferenceEvent extends ChangeEvent {
             feature.values.set(key, value)
         }
         tempValues.clear()
+    }
+}
+
+class RemoveFromReference extends ChangeEvent {
+    constructor() {
+        super();
     }
 }
 
@@ -636,6 +642,17 @@ class CbpPlayer {
                 console;
             } else if (eventType == 'add-to-ereference') {
                 let changeEvent = new AddToReferenceEvent()
+                changeEvent.valueId = domEvent.getElementsByTagName('value')[0].getAttribute('eobject')
+                changeEvent.value = this.resource.getEObject(changeEvent.id)
+                changeEvent.resource = this.resource
+                changeEvent.className = domEvent.getAttribute('eclass')
+                changeEvent.targetId = domEvent.getAttribute('target')
+                changeEvent.featureName = domEvent.getAttribute('name')
+                changeEvent.index = domEvent.getAttribute('position')
+                this.resource.changeEvents.push(changeEvent)
+                console;
+            } else if (eventType == 'remove-from-ereference') {
+                let changeEvent = new RemoveFromReference()
                 changeEvent.valueId = domEvent.getElementsByTagName('value')[0].getAttribute('eobject')
                 changeEvent.value = this.resource.getEObject(changeEvent.id)
                 changeEvent.resource = this.resource

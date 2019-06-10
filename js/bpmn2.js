@@ -15,7 +15,8 @@ const metaBpmn2 = new MetaBpmn2()
 class Bpmn2 {
     constructor() {
         Bpmn2.prototype.layout = null
-        Bpmn2.prototype.incremental = 10
+        Bpmn2.prototype.runningY = 10
+        Bpmn2.prototype.increment = 100
     }
 
 }
@@ -95,15 +96,15 @@ Bpmn2.prototype.Bpmn2DrawSetAttributeEvent = function (graph, event) {
                 let width = 30
                 let height = 30
                 let x = (-width + a) / 2
-                let y = 10 + Bpmn2.prototype.incremental
-                Bpmn2.prototype.incremental += 40
+                let y = 10 + Bpmn2.prototype.runningY
+                Bpmn2.prototype.runningY += Bpmn2.prototype.increment
                 valueNode = graph.insertVertex(parent, event.targetId, event.targetId, x, y, width, height, "shape=ellipse;aspect=fixed;strokeWidth=1;")
             } else if (element.className == "EndEvent") {
                 let width = 30
                 let height = 30
                 let x = (-width + a) / 2
-                let y = 10 + Bpmn2.prototype.incremental
-                Bpmn2.prototype.incremental += 40
+                let y = 10 + Bpmn2.prototype.runningY
+                Bpmn2.prototype.runningY += Bpmn2.prototype.increment
                 valueNode = graph.insertVertex(parent, event.targetId, event.targetId, x, y, width, height, "shape=ellipse;aspect=fixed;strokeWidth=4;")
             } else if (element.className == "SequenceFlow") {
                 valueNode = graph.insertEdge(parent, event.targetId, event.targetId, null, null)
@@ -111,8 +112,8 @@ Bpmn2.prototype.Bpmn2DrawSetAttributeEvent = function (graph, event) {
                 let width = 90
                 let height = 30
                 let x = (-width + a) / 2
-                let y = 10 + Bpmn2.prototype.incremental
-                Bpmn2.prototype.incremental += 40
+                let y = 10 + Bpmn2.prototype.runningY
+                Bpmn2.prototype.runningY += Bpmn2.prototype.increment
                 valueNode = graph.insertVertex(parent, event.targetId, event.targetId, x, y, width, height, "rounded=1;")
             }
         }
@@ -212,15 +213,15 @@ Bpmn2.prototype.Bpmn2DrawAddToReferenceEvent = function (graph, event) {
                     let width = 30
                     let height = 30
                     let x = (-width + a) / 2
-                    let y = 10 + Bpmn2.prototype.incremental
-                    Bpmn2.prototype.incremental += 40
+                    let y = 10 + Bpmn2.prototype.runningY
+                    Bpmn2.prototype.runningY += Bpmn2.prototype.increment
                     value = graph.insertVertex(parent, event.valueId, event.valueId, x, y, width, height, "shape=ellipse;aspect=fixed;strokeWidth=1;")
                 } else if (element.className == "EndEvent") {
                     let width = 30
                     let height = 30
                     let x = (-width + a) / 2
-                    let y = 10 + Bpmn2.prototype.incremental
-                    Bpmn2.prototype.incremental += 40
+                    let y = 10 + Bpmn2.prototype.runningY
+                    Bpmn2.prototype.runningY += Bpmn2.prototype.increment
                     value = graph.insertVertex(parent, event.valueId, event.valueId, x, y, width, height, "shape=ellipse;aspect=fixed;strokeWidth=4;")
                 } else if (element.className == "SequenceFlow") {
                     value = graph.insertEdge(parent, event.valueId, event.valueId, null, null)
@@ -228,8 +229,8 @@ Bpmn2.prototype.Bpmn2DrawAddToReferenceEvent = function (graph, event) {
                     let width = 90
                     let height = 30
                     let x = (-width + a) / 2
-                    let y = 10 + Bpmn2.prototype.incremental
-                    Bpmn2.prototype.incremental += 40
+                    let y = 10 + Bpmn2.prototype.runningY
+                    Bpmn2.prototype.runningY += Bpmn2.prototype.increment
                     value = graph.insertVertex(parent, event.valueId, event.valueId, x, y, width, height, "rounded=1;")
                 }
             }

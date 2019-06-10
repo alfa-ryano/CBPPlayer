@@ -19,14 +19,32 @@
 }
 
 #graphContainer {
-    position: relative;
-    height: 90%;
     width: 100%;
-    background-color: lightgrey;
+    height: 90%;
+}
+
+#graphContainer1 {
+    height: 100%;
+    width: 50%;
+    float: left;
+    background-color: white;
     overflow: auto;
-    /*margin: 0px 10px 10px 10px;*/
+    box-sizing: border-box;
     border-color: black;
     border-width: thin;
+    border-style: solid;
+}
+
+#graphContainer2 {
+    height: 100%;
+    width:  50%;
+    background-color: white;
+    overflow: auto;
+    box-sizing: border-box;
+    border-right: black thin solid;
+    border-top: black thin solid;
+    border-bottom: black thin solid;
+
 }
 
 #controllerContainer {
@@ -40,7 +58,10 @@
     margin-top: 10px;
 }
 
-#buttonPlay {
+button {
     width: 90px;
     height: 30px;
+}
+input {
+    width: 50px;
 }

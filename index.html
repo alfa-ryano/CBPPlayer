@@ -20,6 +20,14 @@
     </div>
     <div id="controllerContainer">
         <button id="buttonPlay" onclick="play()">Play</button>
+        <button id="buttonStop" onclick="stop()" disabled>Stop</button>
+        <label>Change Event: </label>
+        <input id="changeEventNum" value="0" readonly/>
+        <label>/</label>
+        <input id="changeEventTotal" value="0" readonly/>
+        <button id="btnExpEcore" onclick="exportEcore()">Ex. Ecore</button>
+        <button id="btnExpBpmn2" onclick="exportBpmn2()">Ex. BPMN2</button>
+
     </div>
 </div>
 <script type="application/javascript`">
